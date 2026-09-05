@@ -18,7 +18,7 @@
 
 ## 📖 What It Does
 
-**Protein Electrophoresis Agent** is an advanced analytical and computational platform implementing Serum & Urine SPEP/UPEP M-Spike Densitometry Agent.
+**Protein Electrophoresis Agent** is an advanced analytical and computational platform implementing Serum & Urine SPEP/UPEP M-Spike Densitometry Agent. It provides multi-agent consensus evaluation of protein electrophoresis data with enterprise-grade security features.
 
 ---
 
@@ -37,6 +37,12 @@
 
 ## 💻 CLI Quickstart & Usage
 
+### Installation
+
+```bash
+pip install -e .
+```
+
 ### 1. Guided Interactive Mode
 ```bash
 python cli.py
@@ -46,6 +52,16 @@ python cli.py
 ```bash
 python cli.py --task-id <value> --target <value> --primary <value> --secondary <value>
 ```
+
+### 3. Available Commands
+
+| Command | Description |
+|:--------|:------------|
+| `audit` | Run single task evaluation |
+| `chat` | System configuration query |
+| `batch` | Batch process CSV records |
+| `verify-audit` | Verify HMAC audit trail integrity |
+| `serve` | Launch FastAPI REST server |
 
 ### Parameter Reference
 - `--task-id`: Specifies input measurement or parameter value.
@@ -78,6 +94,16 @@ python cli.py --task-id <value> --target <value> --primary <value> --secondary <
 * **Active Learning Bayesian Calibration:** Dynamic tracker updating worker reliability weights and monitoring Brier calibration drift.
 * **FastAPI & Prometheus Telemetry:** Exposes OpenAPI 3.1 REST endpoints and operational Prometheus metrics (`/metrics`).
 
+### Security Configuration
+
+Set the `AUDIT_SECRET_KEY` environment variable for persistent audit integrity across restarts:
+
+```bash
+export AUDIT_SECRET_KEY="your-secure-random-key"
+```
+
+If not set, a transient ephemeral key will be generated (with a warning).
+
 ---
 
 ## 🧪 Testing & Verification
@@ -102,3 +128,46 @@ python simulator.py --tasks 1000 --concurrency 8
 docker build -t protein-electrophoresis-agent .
 docker run -p 8000:8000 protein-electrophoresis-agent
 ```
+
+---
+
+## 📁 Project Structure
+
+```
+protein-electrophoresis-agent/
+├── agents/                          # Core agent package
+│   ├── __init__.py
+│   ├── api.py                       # FastAPI REST API
+│   ├── base.py                      # Security, PHI Guard, Audit Trail
+│   ├── learning.py                  # Bayesian Calibration Engine
+│   ├── llm_factory.py               # LLM Client Factory
+│   ├── metrics.py                   # Prometheus Metrics
+│   ├── models.py                    # Pydantic Data Models
+│   ├── streamer.py                  # WebSocket Telemetry
+│   ├── supervisor.py                # Supervisor Orchestrator
+│   └── workers.py                   # Domain Worker Agents
+├── protein_electrophoresis_agent/   # Clinical agent package
+│   ├── __init__.py
+│   ├── agents.py                    # Distributed Component Hierarchy
+│   ├── cli.py                       # Clinical CLI
+│   ├── engine.py                    # Clinical Algorithmic Engine
+│   ├── models.py                    # Clinical Data Models
+│   └── server.py                    # Clinical FastAPI Server
+├── tests/                           # Test suite
+│   ├── test_enrichment.py
+│   ├── test_protein_electrophoresis_agent.py
+│   └── test_protein_electrophoresis_agent_pkg.py
+├── cli.py                           # Main CLI entry point
+├── enrichment.py                    # Enrichment Feature Implementation
+├── simulator.py                     # Traffic & Stress Testing Simulator
+├── spep_mind.py                     # SpepMind CLI & API
+├── pyproject.toml                   # Project configuration
+├── Dockerfile                       # Container configuration
+└── docker-compose.yml               # Docker Compose configuration
+```
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
