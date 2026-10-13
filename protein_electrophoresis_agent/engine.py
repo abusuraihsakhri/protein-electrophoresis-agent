@@ -9,7 +9,7 @@ from .models import ClinicalCasePayload, AgentAlert, UrgencyLevel, ClinicalInteg
 
 
 class ClinicalDomainEngine:
-    GUIDELINE = "IFCC & KDOQI Laboratory Standards"
+    GUIDELINE = "Unvalidated demonstration-only thresholds"
     PRIMARY_BASELINE_LIMIT = 20.0
     SECONDARY_ALERT_LIMIT = 10.0
 
@@ -18,8 +18,8 @@ class ClinicalDomainEngine:
         if value > cls.PRIMARY_BASELINE_LIMIT:
             return {
                 "title": "Primary Metric Threshold Exceeded",
-                "finding": f"Observed value ({value:.2f}) exceeds IFCC & KDOQI Laboratory Standards clinical baseline limit ({cls.PRIMARY_BASELINE_LIMIT:.1f}).",
-                "recommendation": "Perform immediate secondary verification and calibration review.",
+                "finding": f"Observed value ({value:.2f}) exceeds the demonstration threshold ({cls.PRIMARY_BASELINE_LIMIT:.1f}); units and clinical interpretation are undefined.",
+                "recommendation": "Review inputs manually; this demo is not a clinical decision tool.",
             }
         return None
 
@@ -27,9 +27,9 @@ class ClinicalDomainEngine:
     def evaluate_secondary_kinetics(cls, value: float, is_stat: bool) -> Optional[Dict[str, Any]]:
         if value > cls.SECONDARY_ALERT_LIMIT or is_stat:
             return {
-                "title": "STAT Kinetic Escalation Triggered",
+                "title": "Demonstration Kinetic Flag Triggered",
                 "finding": f"Kinetic parameter ({value:.2f}) with STAT={is_stat} requires prioritized supervision.",
-                "recommendation": "Activate closed-loop verbal clinician notification protocol per Joint Commission standards.",
+                "recommendation": "Review this example flag; it does not establish clinical urgency.",
             }
         return None
 
@@ -40,6 +40,6 @@ class ClinicalDomainEngine:
             return {
                 "title": "Phenotypic / Biomarker Discordance Identified",
                 "finding": f"Status flag '{status_flag}' indicates divergence from standard diagnostic concordance.",
-                "recommendation": f"Order reflex confirmatory testing per IFCC & KDOQI Laboratory Standards clinical recommendations.",
+                "recommendation": "Review the original source results; no reflex-testing recommendation is validated by this demonstration.",
             }
         return None
