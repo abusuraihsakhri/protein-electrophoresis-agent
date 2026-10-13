@@ -1,12 +1,12 @@
 """Regression coverage for audit integrity and CSV flag handling."""
 import csv
-import io
 
 import pytest
 
 from agents.base import AuditTrail
 from cli import main as legacy_main
 from protein_electrophoresis_agent.cli import main as clinical_main
+from protein_electrophoresis_agent.models import ClinicalCasePayload
 
 
 def test_audit_log_detects_modified_signature():
@@ -79,3 +79,23 @@ def test_batch_invalid_boolean_skips_row(tmp_path, entrypoint):
     assert entrypoint(["batch", "-i", str(source), "-o", str(target)]) == 0
     with target.open(encoding="utf-8") as handle:
         assert len(list(csv.DictReader(handle))) == 0
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), float("-inf"), True])
+def test_clinical_demo_rejects_invalid_metric(value):
+    with pytest.raises(ValueError, match="finite"):
+        ClinicalCasePayload(
+            case_id="T-1", patient_synthetic_id="SYN-1",
+            primary_metric=value, secondary_metric=1.0,
+            status_flag="NORMAL",
+        )
+
+
+@pytest.mark.parametrize("identifier", ["", "  ", None])
+def test_clinical_demo_rejects_invalid_case_id(identifier):
+    with pytest.raises(ValueError, match="non-empty"):
+        ClinicalCasePayload(
+            case_id=identifier, patient_synthetic_id="SYN-1",
+            primary_metric=1.0, secondary_metric=1.0,
+            status_flag="NORMAL",
+        )
