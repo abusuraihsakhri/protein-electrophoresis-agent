@@ -17,6 +17,19 @@ import uuid
 from typing import Dict, Any, List, Optional
 
 
+def parse_csv_bool(value):
+    """Interpret boolean flags from CSV as data, not string truthiness."""
+    if isinstance(value, bool):
+        return value
+    text = str(value or "").strip().lower()
+    if text in ("true", "t", "yes", "y", "1"):
+        return True
+    if text in ("false", "f", "no", "n", "0", ""):
+        return False
+    raise ValueError(f"Invalid boolean value: {value!r}")
+
+
+
 class Severity(str):
     INFO = "INFO"
     ADVISORY = "ADVISORY"
@@ -88,7 +101,7 @@ class ImmunofixationMatcherAgent:
     """Specialized Sub-Agent 2 for protein-electrophoresis-agent"""
     def evaluate(self, payload: Dict[str, Any]) -> List[AgentAlert]:
         alerts = []
-        is_critical = bool(payload.get("critical_flag", False))
+        is_critical = parse_csv_bool(payload.get("critical_flag", False))
         val2 = float(payload.get("metric_secondary", 5.0))
         if is_critical or val2 > 12.0:
             alerts.append(
