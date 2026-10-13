@@ -40,8 +40,8 @@ def test_legacy_batch_flag_parsing(tmp_path, flag, expected_critical):
     input_path = tmp_path / "input.csv"
     output_path = tmp_path / "output.csv"
     input_path.write_text(
-        "task_id,target_identifier,primary_metric,secondary_metric,is_critical_flag,status_descriptor\\n"
-        f"T-1,SYN-1,10,2,{flag},NOMINAL\\n", encoding="utf-8",
+        "task_id,target_identifier,primary_metric,secondary_metric,is_critical_flag,status_descriptor\n"
+        f"T-1,SYN-1,10,2,{flag},NOMINAL\n", encoding="utf-8",
     )
     assert legacy_main(["batch", "-i", str(input_path), "-o", str(output_path)]) == 0
     with output_path.open(newline="", encoding="utf-8") as handle:
@@ -56,8 +56,8 @@ def test_clinical_batch_flag_parsing(tmp_path, flag, expected_critical):
     input_path = tmp_path / "input.csv"
     output_path = tmp_path / "output.csv"
     input_path.write_text(
-        "case_id,patient_synthetic_id,metric_primary,metric_secondary,is_stat,status_flag\\n"
-        f"C-1,SYN-1,10,2,{flag},NORMAL\\n", encoding="utf-8",
+        "case_id,patient_synthetic_id,metric_primary,metric_secondary,is_stat,status_flag\n"
+        f"C-1,SYN-1,10,2,{flag},NORMAL\n", encoding="utf-8",
     )
     assert clinical_main(["batch", "-i", str(input_path), "-o", str(output_path)]) == 0
     with output_path.open(newline="", encoding="utf-8") as handle:
@@ -75,7 +75,7 @@ def test_batch_invalid_boolean_skips_row(tmp_path, entrypoint):
     )
     source = tmp_path / "input.csv"
     target = tmp_path / "out.csv"
-    source.write_text(headings + "\\n" + "T-1,SYN-1,10,2,maybe,NOMINAL\\n", encoding="utf-8")
+    source.write_text(headings + "\n" + "T-1,SYN-1,10,2,maybe,NOMINAL\n", encoding="utf-8")
     assert entrypoint(["batch", "-i", str(source), "-o", str(target)]) == 0
     with target.open(encoding="utf-8") as handle:
         assert len(list(csv.DictReader(handle))) == 0
