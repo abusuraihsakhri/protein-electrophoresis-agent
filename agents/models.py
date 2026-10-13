@@ -1,7 +1,7 @@
 """
 Pydantic v2 schemas and data definitions for Protein Electrophoresis Agent.
-Domain: AI Drug Discovery, Structural Biology & Wet-Lab Robotics
-Standard: wwPDB / IUPAC / OpenSMILES / ISAC Standards
+Domain: Generic rule demonstration for synthetic measurements
+Standard: Unvalidated example thresholds
 """
 import datetime
 import math
@@ -54,7 +54,7 @@ class AgentAlert(BaseModel):
     summary: str
     technical_details: str
     actionable_remediation: str
-    standard_reference: str = "wwPDB / IUPAC / OpenSMILES / ISAC Standards"
+    standard_reference: str = "Unvalidated example thresholds"
     timestamp: str = Field(default_factory=lambda: datetime.datetime.now(datetime.timezone.utc).isoformat())
 
     def to_dict(self) -> Dict[str, Any]:
@@ -64,7 +64,7 @@ class AgentAlert(BaseModel):
 class ConsensusDossier(BaseModel):
     dossier_id: str
     system_slug: str = "protein-electrophoresis-agent"
-    domain: str = "AI Drug Discovery, Structural Biology & Wet-Lab Robotics"
+    domain: str = "Generic rule demonstration for synthetic measurements"
     task_id: str
     target_identifier: str
     overall_urgency: UrgencyLevel
@@ -72,7 +72,7 @@ class ConsensusDossier(BaseModel):
     total_alerts: int
     critical_alerts_count: int
     alerts: List[AgentAlert]
-    standard_reference: str = "wwPDB / IUPAC / OpenSMILES / ISAC Standards"
+    standard_reference: str = "Unvalidated example thresholds"
     consensus_summary: str
     audit_hash: str
     timestamp: str = Field(default_factory=lambda: datetime.datetime.now(datetime.timezone.utc).isoformat())
