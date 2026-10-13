@@ -1,173 +1,72 @@
 # Protein Electrophoresis Agent
 
-> **Domain:** Computational Biology & AI Drug Discovery  
-> **Reference Guidelines & Standards:** `wwPDB, IUPAC & CLSI Computational Guidelines`
+A Python repository containing experimental, rule-based demonstrations for synthetic laboratory measurements, with command-line tools, FastAPI endpoints, tests, and a standalone browser interface.
 
-<div align="center">
+**Clinical limitation:** The current implementations do **not** quantify an M-spike from an electrophoretic trace or establish SPEP/UPEP diagnoses. Their unitless thresholds (including 20, 25, 10, and 12 in different legacy modules) are illustrative, not validated clinical cutoffs. No diagnostic, therapeutic, or emergency decision should be based on these outputs.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB.svg?logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688.svg?logo=fastapi&logoColor=white)
-![Audit Trail](https://img.shields.io/badge/Audit-HMAC--SHA256_Tamper--Evident-brightgreen.svg)
-![Zero-PHI Guard](https://img.shields.io/badge/Guard-Zero--PHI_Outbound-blue.svg)
-![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?logo=docker&logoColor=white)
+## Browser demonstration
 
-</div>
+Open `web/index.html` in a current desktop or mobile browser. Enter **synthetic** task and specimen IDs plus generic primary and secondary values, then select **Evaluate demo rules**. View the actual locally computed flags and export the JSON result. There is no simulated API response, HMAC signing, or backend dependency.
 
----
+The browser demonstration is implemented in plain JavaScript; Python-in-the-browser is unnecessary for these simple example rules. It makes no network requests for evaluation and does not persist case data across page reloads. Do not enter clinical or personally identifying information.
 
-## 📖 What It Does
+## Python installation
 
-**Protein Electrophoresis Agent** is an advanced analytical and computational platform implementing Serum & Urine SPEP/UPEP M-Spike Densitometry Agent. It provides multi-agent consensus evaluation of protein electrophoresis data with enterprise-grade security features.
-
----
-
-## ⚙️ Key Capabilities & Algorithmic Modules
-
-### 🔬 Core Algorithmic & Evaluation Engines
-
-- **`Severity`** — dedicated module for severity evaluation and state verification.
-- **`DomainKnowledgeRegistry`**: Enterprise domain rules, guideline matrices, and evidence benchmarks.
-- **`AgentAlert`** — dedicated module for agent alert evaluation and state verification.
-- **`MSpikeDensitometryAgent`**: Specialized Sub-Agent 1 for protein-electrophoresis-agent
-- **`ImmunofixationMatcherAgent`**: Specialized Sub-Agent 2 for protein-electrophoresis-agent
-- **`FreeLightChainAuditorAgent`**: Specialized Sub-Agent 3 for protein-electrophoresis-agent
-
----
-
-## 💻 CLI Quickstart & Usage
-
-### Installation
+Requires Python 3.9 or newer. From the repository root:
 
 ```bash
-pip install -e .
+python -m pip install -e '.[api,test]'
+python -m pytest -q
 ```
 
-### 1. Guided Interactive Mode
-```bash
-python cli.py
-```
+For core CLI use without HTTP support, `python -m pip install -e .` is sufficient.
 
-### 2. Direct Parameterized Evaluation
-```bash
-python cli.py --task-id <value> --target <value> --primary <value> --secondary <value>
-```
+## Commands
 
-### 3. Available Commands
-
-| Command | Description |
-|:--------|:------------|
-| `audit` | Run single task evaluation |
-| `chat` | System configuration query |
-| `batch` | Batch process CSV records |
-| `verify-audit` | Verify HMAC audit trail integrity |
-| `serve` | Launch FastAPI REST server |
-
-### Parameter Reference
-- `--task-id`: Specifies input measurement or parameter value.
-- `--target`: Specifies input measurement or parameter value.
-- `--primary`: Specifies input measurement or parameter value.
-- `--secondary`: Specifies input measurement or parameter value.
-- `--critical`: Specifies input measurement or parameter value.
-- `--status`: Specifies input measurement or parameter value.
-- `--input`: Specifies input measurement or parameter value.
-- `--output`: Specifies input measurement or parameter value.
-
-### Input Data Schema
-
-| Field | Description | Requirement |
-|:------|:------------|:------------|
-| `case_id` | Parameter / observation metric | Required |
-| `patient_synthetic_id` | Parameter / observation metric | Required |
-| `metric_primary` | Parameter / observation metric | Required |
-| `metric_secondary` | Parameter / observation metric | Required |
-| `is_stat` | Parameter / observation metric | Required |
-| `status_flag` | Parameter / observation metric | Required |
-
----
-
-## 🛡️ Security & Enterprise Architecture
-
-* **Zero-PHI Outbound Interceptor:** Active AST and regex inspection blocking SSNs, MRNs, phone numbers, and patient identifiers.
-* **Tamper-Evident HMAC-SHA256 Audit Trail:** Chained, cryptographically signed logs for every evaluation and state transition.
-* **Air-Gapped LLM Reasoning Adapter:** Agnostic integration for local Ollama instances (`llama3`, `mistral`), Claude 3.5 Sonnet, GPT-4o, and deterministic test mocks.
-* **Active Learning Bayesian Calibration:** Dynamic tracker updating worker reliability weights and monitoring Brier calibration drift.
-* **FastAPI & Prometheus Telemetry:** Exposes OpenAPI 3.1 REST endpoints and operational Prometheus metrics (`/metrics`).
-
-### Security Configuration
-
-Set the `AUDIT_SECRET_KEY` environment variable for persistent audit integrity across restarts:
+The installed `protein-electrophoresis-engine` command uses the `protein_electrophoresis_agent` demonstration package:
 
 ```bash
-export AUDIT_SECRET_KEY="your-secure-random-key"
+protein-electrophoresis-engine audit --case-id DEMO-001 --primary 10 --secondary 2 --status NORMAL
+protein-electrophoresis-engine batch -i sample.csv -o results.csv
+protein-electrophoresis-engine chat status
+protein-electrophoresis-engine serve --host 127.0.0.1 --port 8000
 ```
 
-If not set, a transient ephemeral key will be generated (with a warning).
-
----
-
-## 🧪 Testing & Verification
-
-Run the automated test suite:
+The repository also includes a **separate legacy CLI** with a different payload schema and rule thresholds:
 
 ```bash
-pytest -v
+python cli.py audit --task-id DEMO-001 --target SYNTH-001 --primary 10 --secondary 2
+python cli.py verify-audit
+python cli.py serve --host 127.0.0.1 --port 8000
 ```
 
-Execute high-throughput batch simulation benchmarks:
+The legacy Python API provides `GET /health`, `GET /metrics`, `POST /api/audit`, `POST /api/chat`, and `GET /api/audit/logs`. The packaged clinical demonstration API has a different request format, so its endpoints are not interchangeable. The server listens only on loopback by default.
+
+CSV flags `True`/`False`, `1`/`0`, and `yes`/`no` are recognized case-insensitively. Invalid boolean rows are skipped with a warning.
+
+## Privacy and security limitations
+
+The browser page processes demonstration inputs locally. The Python services handle submitted data **on the host running the server**, and their in-memory registries and audit trails are not designed for regulated clinical workloads. A small set of regular-expression identifier checks is provided, but it is not comprehensive de-identification or HIPAA Safe Harbor verification. The audit trail uses in-memory HMAC chaining and is not durable across process restarts.
+
+For persistent Python audit-chain signing, set a unique `AUDIT_SECRET_KEY` in the server's environment. Docker Compose requires this variable instead of providing a shared secret. Keep the server private unless appropriate authentication, authorization, transport protection, monitoring, and data governance are added.
+
+## Development and verification
 
 ```bash
-python simulator.py --tasks 1000 --concurrency 8
+python -m compileall -q agents protein_electrophoresis_agent
+python -m pytest -q
+node --check web/app.js
+node tests/browser_logic.cjs
 ```
 
----
+CI runs Python checks on Python 3.10–3.12 and Node-based browser-logic tests. The standalone browser does not require Node.js to use; Node is only for test execution.
 
-## 🐳 Container Deployment
+Technology: Python, Pydantic, optional FastAPI/Uvicorn, standard JavaScript, HTML, and CSS. The browser demonstration is compatible with modern browsers supporting ES2018 JavaScript and `Blob` downloads.
 
-```bash
-docker build -t protein-electrophoresis-agent .
-docker run -p 8000:8000 protein-electrophoresis-agent
-```
+## Scope and known gaps
 
----
+The repository retains several historical CLI and API variants with inconsistent example thresholds and terminology. Neither the browser demo nor the Python examples performs validated densitometric peak integration, immunofixation interpretation, or free light-chain testing. Rigorous clinical rules, validated reference data, and specimen-level verification would be required before offering a real protein electrophoresis interpretation tool.
 
-## 📁 Project Structure
+## License
 
-```
-protein-electrophoresis-agent/
-├── agents/                          # Core agent package
-│   ├── __init__.py
-│   ├── api.py                       # FastAPI REST API
-│   ├── base.py                      # Security, PHI Guard, Audit Trail
-│   ├── learning.py                  # Bayesian Calibration Engine
-│   ├── llm_factory.py               # LLM Client Factory
-│   ├── metrics.py                   # Prometheus Metrics
-│   ├── models.py                    # Pydantic Data Models
-│   ├── streamer.py                  # WebSocket Telemetry
-│   ├── supervisor.py                # Supervisor Orchestrator
-│   └── workers.py                   # Domain Worker Agents
-├── protein_electrophoresis_agent/   # Clinical agent package
-│   ├── __init__.py
-│   ├── agents.py                    # Distributed Component Hierarchy
-│   ├── cli.py                       # Clinical CLI
-│   ├── engine.py                    # Clinical Algorithmic Engine
-│   ├── models.py                    # Clinical Data Models
-│   └── server.py                    # Clinical FastAPI Server
-├── tests/                           # Test suite
-│   ├── test_enrichment.py
-│   ├── test_protein_electrophoresis_agent.py
-│   └── test_protein_electrophoresis_agent_pkg.py
-├── cli.py                           # Main CLI entry point
-├── enrichment.py                    # Enrichment Feature Implementation
-├── simulator.py                     # Traffic & Stress Testing Simulator
-├── spep_mind.py                     # SpepMind CLI & API
-├── pyproject.toml                   # Project configuration
-├── Dockerfile                       # Container configuration
-└── docker-compose.yml               # Docker Compose configuration
-```
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT. See [LICENSE](LICENSE).
