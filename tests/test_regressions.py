@@ -5,6 +5,7 @@ import pytest
 
 from agents.base import AuditTrail
 from cli import main as legacy_main
+from spep_mind import main as spep_main
 from protein_electrophoresis_agent.cli import main as clinical_main
 from protein_electrophoresis_agent.models import ClinicalCasePayload
 
@@ -99,3 +100,17 @@ def test_clinical_demo_rejects_invalid_case_id(identifier):
             primary_metric=1.0, secondary_metric=1.0,
             status_flag="NORMAL",
         )
+
+
+@pytest.mark.parametrize("flag, expected_critical", [("False", 0), ("0", 0), ("True", 1)])
+def test_legacy_spepmind_csv_boolean(tmp_path, flag, expected_critical):
+    source = tmp_path / "legacy_input.csv"
+    target = tmp_path / "legacy_results.csv"
+    source.write_text(
+        "case_id,metric_primary,metric_secondary,critical_flag,status_text\n"
+        f"DEMO-1,10,2,{flag},NORMAL\n", encoding="utf-8",
+    )
+    assert spep_main(["batch", "-i", str(source), "-o", str(target)]) == 0
+    with target.open(newline="", encoding="utf-8") as handle:
+        row = next(csv.DictReader(handle))
+    assert int(row["critical_count"]) == expected_critical
