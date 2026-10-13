@@ -1,5 +1,5 @@
 """
-Enterprise Security, PHI Outbound Guard, and HMAC-SHA256 Audit Trail.
+Heuristic identifier checking and in-memory HMAC-SHA256 audit trail.
 
 """
 import os
@@ -26,7 +26,7 @@ PHI_PATTERNS = [
 
 
 class SecurityException(Exception):
-    """Raised when outbound data violates HIPAA Safe Harbor or contains raw PHI."""
+    """Raised when one of the limited identifier patterns matches."""
     pass
 
 
@@ -57,7 +57,7 @@ class PHIGuard:
 
 
 class AuditTrail:
-    """Cryptographic Tamper-Evident HMAC-SHA256 Audit Trail."""
+    """In-memory HMAC chain. It is not persistent or a compliance guarantee."""
     def __init__(self, secret_key: Optional[str] = None):
         resolved_key = secret_key or os.getenv("AUDIT_SECRET_KEY")
         if not resolved_key:
