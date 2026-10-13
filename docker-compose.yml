@@ -1,13 +1,11 @@
-version: '3.8'
-
 services:
   protein-electrophoresis-engine:
     build: .
     container_name: protein-electrophoresis-engine
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     environment:
-      - AUDIT_SECRET_KEY=protein-electrophoresis-engine-prod-audit-key-2026
+      - AUDIT_SECRET_KEY=${AUDIT_SECRET_KEY:?Set AUDIT_SECRET_KEY in your environment before starting Compose}
       - MODEL_PROVIDER=mock
     restart: unless-stopped
     healthcheck:

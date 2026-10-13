@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 SpepMind: Serum & Urine Protein Electrophoresis M-Spike Quantifier Agent
-Supervises capillary and gel SPEP/UPEP densitometry tracings, quantifying M-spikes, beta-gamma bridging, and serum free light chain (sFLC) ratios.
+Demonstrates generic rules on synthetic scalar inputs; does not interpret electrophoretic traces.
 
 Domain: Clinical Chemistry
 Author: Dr. Abu Suraih Sakhri
@@ -15,6 +15,19 @@ import json
 import sys
 import uuid
 from typing import Dict, Any, List, Optional
+
+
+def parse_csv_bool(value):
+    """Interpret boolean flags from CSV as data, not string truthiness."""
+    if isinstance(value, bool):
+        return value
+    text = str(value or "").strip().lower()
+    if text in ("true", "t", "yes", "y", "1"):
+        return True
+    if text in ("false", "f", "no", "n", "0", ""):
+        return False
+    raise ValueError(f"Invalid boolean value: {value!r}")
+
 
 
 class Severity(str):
@@ -32,15 +45,15 @@ class Severity(str):
 class DomainKnowledgeRegistry:
     """Enterprise domain rules, guideline matrices, and evidence benchmarks."""
     SYSTEM_VERSION = "2.0.0-PRO-CLINICAL"
-    ZERO_PHI_COMPLIANCE = True
-    HIPAA_SAFE_HARBOR = "ACTIVE_ON_PREMISES"
+    ZERO_PHI_COMPLIANCE = False
+    HIPAA_SAFE_HARBOR = "NOT_ASSESSED"
 
     @staticmethod
     def audit_security_and_integrity(payload: Dict[str, Any]) -> List[str]:
         warnings = []
         for key in payload.keys():
             if any(phi_keyword in key.lower() for phi_keyword in ["patient_name", "ssn", "mrn_raw", "dob_raw"]):
-                warnings.append(f"PHI_DEFENSE_TRIGGERED: Direct identifier '{key}' masked to synthetic token.")
+                warnings.append(f"PHI_DEFENSE_TRIGGERED: Direct identifier field '{key}' detected; value was NOT masked.")
         return warnings
 
 class AgentAlert:
@@ -78,7 +91,7 @@ class MSpikeDensitometryAgent:
                     severity=Severity.WARNING,
                     title="Primary Metric Threshold Discrepancy",
                     details=f"Primary metric value ({val1:.1f}) exceeded standard clinical baseline.",
-                    recommendation="Perform secondary cross-check and review calibration profile.",
+                    recommendation="Demo-only threshold flag; verify with validated methods.",
                 )
             )
         return alerts
@@ -88,7 +101,7 @@ class ImmunofixationMatcherAgent:
     """Specialized Sub-Agent 2 for protein-electrophoresis-agent"""
     def evaluate(self, payload: Dict[str, Any]) -> List[AgentAlert]:
         alerts = []
-        is_critical = bool(payload.get("critical_flag", False))
+        is_critical = parse_csv_bool(payload.get("critical_flag", False))
         val2 = float(payload.get("metric_secondary", 5.0))
         if is_critical or val2 > 12.0:
             alerts.append(
@@ -98,7 +111,7 @@ class ImmunofixationMatcherAgent:
                     severity=Severity.CRITICAL,
                     title="Urgent Consensus Protocol Trigger",
                     details=f"Secondary parameter index ({val2:.1f}) triggered automated supervisory escalation.",
-                    recommendation="Initiate mandatory closed-loop clinical notification protocol.",
+                    recommendation="This example flag is not a clinical notification instruction.",
                 )
             )
         return alerts
@@ -117,7 +130,7 @@ class FreeLightChainAuditorAgent:
                     severity=Severity.ADVISORY,
                     title="Biomarker / Feature Discordance Flag",
                     details=f"Phenotypic discordance noted in observation status ({status_text}).",
-                    recommendation="Reconcile correlative findings with secondary confirmatory testing.",
+                    recommendation="Review demonstration descriptor; no diagnostic recommendation is established.",
                 )
             )
         return alerts
@@ -165,9 +178,9 @@ class ElectrophoresisCoordinator:
         if "summary" in q or "status" in q:
             return f"SpepMind: Serum & Urine Protein Electrophoresis M-Spike Quantifier Agent currently tracking {len(self.case_registry)} cases in local air-gapped memory."
         elif "guidelines" in q or "protocol" in q:
-            return "All sub-agents operate under validated consensus clinical algorithms and CAP/CLSI/NCCN/WHO standards."
+            return "No validated clinical standards or reference cutoffs are implemented in this demo."
         else:
-            return f"SpepMind: Serum & Urine Protein Electrophoresis M-Spike Quantifier Agent executive agent online. Continuous supervisory monitoring active across all domain parameters."
+            return f"SpepMind: Serum & Urine Protein Electrophoresis M-Spike Quantifier Agent demonstration active with in-memory synthetic data only."
 
 
 coordinator = ElectrophoresisCoordinator()
@@ -180,7 +193,7 @@ def create_app():
 
         app = FastAPI(
             title="SpepMind: Serum & Urine Protein Electrophoresis M-Spike Quantifier Agent",
-            description="Supervises capillary and gel SPEP/UPEP densitometry tracings, quantifying M-spikes, beta-gamma bridging, and serum free light chain (sFLC) ratios.",
+            description="Demonstrates generic rules on synthetic scalar inputs; does not interpret electrophoretic traces.",
             version="1.0.0",
         )
 

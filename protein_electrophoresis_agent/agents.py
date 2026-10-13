@@ -93,7 +93,7 @@ class ElectrophoresisCoordinator:
             "stat_critical_alerts": stat_count,
             "warning_alerts": warn_count,
             "alerts": [a.to_dict() for a in all_alerts],
-            "guideline_standard": "IFCC & KDOQI Laboratory Standards",
+            "guideline_standard": "Unvalidated demonstration rules",
             "consensus_summary": f"Multi-agent supervision completed across 3 sub-agents with status [{status.value}].",
         }
 
@@ -105,6 +105,6 @@ class ElectrophoresisCoordinator:
         if "status" in q or "summary" in q:
             return f"SpepMind: Serum & Urine Protein Electrophoresis M-Spike Quantifier Agent currently tracking {len(self.case_registry)} cases in on-premises memory."
         elif "guideline" in q or "standard" in q:
-            return "Active clinical surveillance operates under IFCC & KDOQI Laboratory Standards validated protocols."
+            return "This is a demonstration, not a validated clinical standard or an IFCC/KDOQI diagnostic algorithm."
         else:
-            return f"SpepMind: Serum & Urine Protein Electrophoresis M-Spike Quantifier Agent executive agent online. Zero-PHI air-gapped monitoring active."
+            return "Synthetic-data demonstration active. No PHI protection or clinical validity is guaranteed."

@@ -14,7 +14,7 @@ def create_app():
 
         app = FastAPI(
             title="SpepMind: Serum & Urine Protein Electrophoresis M-Spike Quantifier Agent",
-            description="Supervises capillary and gel SPEP/UPEP densitometry tracings, quantifying M-spikes, beta-gamma bridging, and serum free light chain (sFLC) ratios.",
+            description="Demonstration rules for synthetic, unitless metrics; not validated SPEP/UPEP analysis.",
             version="2.0.0-PRO",
         )
 

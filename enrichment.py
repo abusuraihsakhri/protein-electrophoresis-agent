@@ -1,6 +1,6 @@
 """
 Enrichment Feature Implementation for protein-electrophoresis-agent.
-Generated based on domain-specific requirements in specifications.
+Illustrative placeholder rule engines. They do not implement the clinical features in their titles.
 """
 from dataclasses import dataclass, field
 from typing import Dict, Any, List, Optional, Tuple
@@ -23,7 +23,7 @@ class MspikeLongitudinalTrackingWithResponsetotherapyAssessmentEngineResult:
 
 class MspikeLongitudinalTrackingWithResponsetotherapyAssessmentEngine:
     """
-    M-Spike Longitudinal Tracking with Response-to-Therapy Assessment: **Goal:** Track M-spike over time and classify treatment response per IMWG criteria.
+    M-Spike Longitudinal Tracking with Response-to-Therapy Assessment: **Goal:** Placeholder for a future longitudinal assessment; does not implement IMWG response criteria.
     """
     def __init__(self, threshold: float = 1.0, config: Optional[Dict[str, Any]] = None):
         self.threshold = threshold
@@ -39,13 +39,13 @@ class MspikeLongitudinalTrackingWithResponsetotherapyAssessmentEngine:
         if primary_value > self.threshold * 2:
             status = "CRITICAL_ALERT"
             alerts.append(f"M-Spike Longitudinal Tracking with Response-to-Therapy Assessment: Primary value {primary_value:.2f} breached critical threshold ({self.threshold * 2:.2f})")
-            recs.append("Initiate immediate protocol review and escalate to attending lead.")
+            recs.append("Demonstration flag only; no clinical escalation is established.")
         elif primary_value > self.threshold:
             status = "WARNING"
             alerts.append(f"M-Spike Longitudinal Tracking with Response-to-Therapy Assessment: Value {primary_value:.2f} exceeds baseline threshold ({self.threshold:.2f})")
-            recs.append("Increase monitoring frequency and perform secondary verification.")
+            recs.append("Demonstration threshold only; confirm using validated laboratory methods.")
         else:
-            recs.append("Parameters nominal under standard operating bounds.")
+            recs.append("No example threshold matched; this is not evidence of clinical normality.")
 
         res = MspikeLongitudinalTrackingWithResponsetotherapyAssessmentEngineResult(
             feature_name="M-Spike Longitudinal Tracking with Response-to-Therapy Assessment",
@@ -89,13 +89,13 @@ class GetApimspikehistorypatientidReturnsLongitudinalDataWithResponseClassificat
         if primary_value > self.threshold * 2:
             status = "CRITICAL_ALERT"
             alerts.append(f"GET /api/m_spike_history/{{patient_id}} returns longitudinal data with response classifications: Primary value {primary_value:.2f} breached critical threshold ({self.threshold * 2:.2f})")
-            recs.append("Initiate immediate protocol review and escalate to attending lead.")
+            recs.append("Demonstration flag only; no clinical escalation is established.")
         elif primary_value > self.threshold:
             status = "WARNING"
             alerts.append(f"GET /api/m_spike_history/{{patient_id}} returns longitudinal data with response classifications: Value {primary_value:.2f} exceeds baseline threshold ({self.threshold:.2f})")
-            recs.append("Increase monitoring frequency and perform secondary verification.")
+            recs.append("Demonstration threshold only; confirm using validated laboratory methods.")
         else:
-            recs.append("Parameters nominal under standard operating bounds.")
+            recs.append("No example threshold matched; this is not evidence of clinical normality.")
 
         res = GetApimspikehistorypatientidReturnsLongitudinalDataWithResponseClassificationsEngineResult(
             feature_name="GET /api/m_spike_history/{patient_id} returns longitudinal data with response classifications",
@@ -139,13 +139,13 @@ class SerumFreeLightChainRatioTrendingEngine:
         if primary_value > self.threshold * 2:
             status = "CRITICAL_ALERT"
             alerts.append(f"Serum Free Light Chain Ratio Trending: Primary value {primary_value:.2f} breached critical threshold ({self.threshold * 2:.2f})")
-            recs.append("Initiate immediate protocol review and escalate to attending lead.")
+            recs.append("Demonstration flag only; no clinical escalation is established.")
         elif primary_value > self.threshold:
             status = "WARNING"
             alerts.append(f"Serum Free Light Chain Ratio Trending: Value {primary_value:.2f} exceeds baseline threshold ({self.threshold:.2f})")
-            recs.append("Increase monitoring frequency and perform secondary verification.")
+            recs.append("Demonstration threshold only; confirm using validated laboratory methods.")
         else:
-            recs.append("Parameters nominal under standard operating bounds.")
+            recs.append("No example threshold matched; this is not evidence of clinical normality.")
 
         res = SerumFreeLightChainRatioTrendingEngineResult(
             feature_name="Serum Free Light Chain Ratio Trending",
@@ -189,13 +189,13 @@ class GetApisflctrendpatientidReturnsTimeseriesWithTrendAnnotationsEngine:
         if primary_value > self.threshold * 2:
             status = "CRITICAL_ALERT"
             alerts.append(f"GET /api/sflc-trend/{{patient_id}} returns time-series with trend annotations: Primary value {primary_value:.2f} breached critical threshold ({self.threshold * 2:.2f})")
-            recs.append("Initiate immediate protocol review and escalate to attending lead.")
+            recs.append("Demonstration flag only; no clinical escalation is established.")
         elif primary_value > self.threshold:
             status = "WARNING"
             alerts.append(f"GET /api/sflc-trend/{{patient_id}} returns time-series with trend annotations: Value {primary_value:.2f} exceeds baseline threshold ({self.threshold:.2f})")
-            recs.append("Increase monitoring frequency and perform secondary verification.")
+            recs.append("Demonstration threshold only; confirm using validated laboratory methods.")
         else:
-            recs.append("Parameters nominal under standard operating bounds.")
+            recs.append("No example threshold matched; this is not evidence of clinical normality.")
 
         res = GetApisflctrendpatientidReturnsTimeseriesWithTrendAnnotationsEngineResult(
             feature_name="GET /api/sflc-trend/{patient_id} returns time-series with trend annotations",
@@ -239,13 +239,13 @@ class ElectrophoresisDensitometryCurveComparisonEngine:
         if primary_value > self.threshold * 2:
             status = "CRITICAL_ALERT"
             alerts.append(f"Electrophoresis Densitometry Curve Comparison: Primary value {primary_value:.2f} breached critical threshold ({self.threshold * 2:.2f})")
-            recs.append("Initiate immediate protocol review and escalate to attending lead.")
+            recs.append("Demonstration flag only; no clinical escalation is established.")
         elif primary_value > self.threshold:
             status = "WARNING"
             alerts.append(f"Electrophoresis Densitometry Curve Comparison: Value {primary_value:.2f} exceeds baseline threshold ({self.threshold:.2f})")
-            recs.append("Increase monitoring frequency and perform secondary verification.")
+            recs.append("Demonstration threshold only; confirm using validated laboratory methods.")
         else:
-            recs.append("Parameters nominal under standard operating bounds.")
+            recs.append("No example threshold matched; this is not evidence of clinical normality.")
 
         res = ElectrophoresisDensitometryCurveComparisonEngineResult(
             feature_name="Electrophoresis Densitometry Curve Comparison",
@@ -289,13 +289,13 @@ class PostApicomparetracingsReturnsDeltaDataAndFlaggedFractionsEngine:
         if primary_value > self.threshold * 2:
             status = "CRITICAL_ALERT"
             alerts.append(f"POST /api/compare-tracings returns delta data and flagged fractions: Primary value {primary_value:.2f} breached critical threshold ({self.threshold * 2:.2f})")
-            recs.append("Initiate immediate protocol review and escalate to attending lead.")
+            recs.append("Demonstration flag only; no clinical escalation is established.")
         elif primary_value > self.threshold:
             status = "WARNING"
             alerts.append(f"POST /api/compare-tracings returns delta data and flagged fractions: Value {primary_value:.2f} exceeds baseline threshold ({self.threshold:.2f})")
-            recs.append("Increase monitoring frequency and perform secondary verification.")
+            recs.append("Demonstration threshold only; confirm using validated laboratory methods.")
         else:
-            recs.append("Parameters nominal under standard operating bounds.")
+            recs.append("No example threshold matched; this is not evidence of clinical normality.")
 
         res = PostApicomparetracingsReturnsDeltaDataAndFlaggedFractionsEngineResult(
             feature_name="POST /api/compare-tracings returns delta data and flagged fractions",
@@ -323,7 +323,7 @@ class ImmunofixationAutogradientQuantificationEngineResult:
 
 class ImmunofixationAutogradientQuantificationEngine:
     """
-    Immunofixation Autogradient Quantification: **Goal:** Auto-interpret IFE gel images for monoclonal band identification.
+    Immunofixation Autogradient Quantification: **Goal:** Placeholder only; it does not inspect IFE gel images.
     """
     def __init__(self, threshold: float = 1.0, config: Optional[Dict[str, Any]] = None):
         self.threshold = threshold
@@ -339,13 +339,13 @@ class ImmunofixationAutogradientQuantificationEngine:
         if primary_value > self.threshold * 2:
             status = "CRITICAL_ALERT"
             alerts.append(f"Immunofixation Autogradient Quantification: Primary value {primary_value:.2f} breached critical threshold ({self.threshold * 2:.2f})")
-            recs.append("Initiate immediate protocol review and escalate to attending lead.")
+            recs.append("Demonstration flag only; no clinical escalation is established.")
         elif primary_value > self.threshold:
             status = "WARNING"
             alerts.append(f"Immunofixation Autogradient Quantification: Value {primary_value:.2f} exceeds baseline threshold ({self.threshold:.2f})")
-            recs.append("Increase monitoring frequency and perform secondary verification.")
+            recs.append("Demonstration threshold only; confirm using validated laboratory methods.")
         else:
-            recs.append("Parameters nominal under standard operating bounds.")
+            recs.append("No example threshold matched; this is not evidence of clinical normality.")
 
         res = ImmunofixationAutogradientQuantificationEngineResult(
             feature_name="Immunofixation Autogradient Quantification",
@@ -389,13 +389,13 @@ class ReturnListOfDetectedMonoclonalBandsWithPositionIntensityAndHeavyChainTypeE
         if primary_value > self.threshold * 2:
             status = "CRITICAL_ALERT"
             alerts.append(f"Return list of detected monoclonal bands with position, intensity, and heavy chain type: Primary value {primary_value:.2f} breached critical threshold ({self.threshold * 2:.2f})")
-            recs.append("Initiate immediate protocol review and escalate to attending lead.")
+            recs.append("Demonstration flag only; no clinical escalation is established.")
         elif primary_value > self.threshold:
             status = "WARNING"
             alerts.append(f"Return list of detected monoclonal bands with position, intensity, and heavy chain type: Value {primary_value:.2f} exceeds baseline threshold ({self.threshold:.2f})")
-            recs.append("Increase monitoring frequency and perform secondary verification.")
+            recs.append("Demonstration threshold only; confirm using validated laboratory methods.")
         else:
-            recs.append("Parameters nominal under standard operating bounds.")
+            recs.append("No example threshold matched; this is not evidence of clinical normality.")
 
         res = ReturnListOfDetectedMonoclonalBandsWithPositionIntensityAndHeavyChainTypeEngineResult(
             feature_name="Return list of detected monoclonal bands with position, intensity, and heavy chain type",

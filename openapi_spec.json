@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Protein Electrophoresis Engine API",
-    "description": "Enterprise Distributed Component Platform (Clinical & Cryptographic AI) adhering to CAP / CLSI / NIST Standards.",
+    "description": "Experimental API for synthetic task metrics. Generic thresholds are not clinically validated.",
     "version": "3.0.0-ENTERPRISE",
     "contact": {
       "name": "Dr. Abu Suraih Sakhri",
@@ -15,17 +15,17 @@
         "summary": "Health and metadata check",
         "responses": {
           "200": {
-            "description": "System optimal"
+            "description": "Health and demonstration metadata."
           }
         }
       }
     },
     "/metrics": {
       "get": {
-        "summary": "Prometheus operational metrics",
+        "summary": "Process-local operational counters in JSON format",
         "responses": {
           "200": {
-            "description": "Prometheus text metrics"
+            "description": "JSON counters (not Prometheus exposition text)."
           }
         }
       }
@@ -69,14 +69,14 @@
         },
         "responses": {
           "200": {
-            "description": "Consensus dossier with HMAC signature"
+            "description": "Demo rule dossier including an in-memory HMAC-chain entry hash."
           }
         }
       }
     },
     "/api/chat": {
       "post": {
-        "summary": "Air-gapped supervisory conversational assistant",
+        "summary": "Deterministic demonstration adapter; no diagnostic inference",
         "requestBody": {
           "content": {
             "application/json": {
@@ -96,17 +96,17 @@
         },
         "responses": {
           "200": {
-            "description": "Supervisory response"
+            "description": "Demonstration-only response."
           }
         }
       }
     },
     "/api/audit/logs": {
       "get": {
-        "summary": "Retrieve and cryptographically verify HMAC audit trail",
+        "summary": "Read in-memory HMAC-chain audit metadata",
         "responses": {
           "200": {
-            "description": "Cryptographic audit trail"
+            "description": "Audit metadata and signature verification; no durable log."
           }
         }
       }
