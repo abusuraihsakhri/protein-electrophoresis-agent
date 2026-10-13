@@ -11,6 +11,19 @@ from .agents import ElectrophoresisCoordinator
 coordinator = ElectrophoresisCoordinator()
 
 
+def parse_csv_bool(value):
+    """Decode CSV boolean strings rather than using bool("False") == True."""
+    if isinstance(value, bool):
+        return value
+    text = str(value or "").strip().lower()
+    if text in ("true", "t", "yes", "y", "1"):
+        return True
+    if text in ("false", "f", "no", "n", "0", ""):
+        return False
+    raise ValueError(f"Invalid boolean value: {value!r}")
+
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(prog="protein-electrophoresis-agent", description="SpepMind: Serum & Urine Protein Electrophoresis M-Spike Quantifier Agent")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -72,6 +85,9 @@ def main(argv=None):
             with open(args.input, mode="r", encoding="utf-8-sig") as f:
                 reader = csv.DictReader(f)
                 fieldnames = list(reader.fieldnames or [])
+                if not fieldnames:
+                    print("Error: Input CSV must have a header row.", file=sys.stderr)
+                    return 1
                 rows = list(reader)
         except FileNotFoundError:
             print(f"Error: Input file '{args.input}' not found.", file=sys.stderr)
@@ -80,7 +96,7 @@ def main(argv=None):
             print(f"Error: Permission denied reading '{args.input}'.", file=sys.stderr)
             return 1
 
-        out_fields = fieldnames + ["overall_status", "total_alerts", "stat_critical_alerts", "consensus_summary"]
+        out_fields = list(dict.fromkeys(fieldnames + ["overall_status", "total_alerts", "stat_critical_alerts", "consensus_summary"]))
         out_rows = []
         for r in rows:
             try:
@@ -90,7 +106,7 @@ def main(argv=None):
                     primary_metric=float(r.get("metric_primary", r.get("primary_metric", 15.0))),
                     secondary_metric=float(r.get("metric_secondary", r.get("secondary_metric", 5.0))),
                     status_flag=r.get("status_flag", r.get("status_text", "NORMAL")),
-                    is_stat=bool(r.get("is_stat", r.get("critical_flag", False))),
+                    is_stat=parse_csv_bool(r.get("is_stat", r.get("critical_flag", False))),
                 )
                 dossier = coordinator.process_case(case)
             except (ValueError, TypeError) as e:
