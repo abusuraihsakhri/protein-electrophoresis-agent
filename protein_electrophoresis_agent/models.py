@@ -4,6 +4,7 @@ Domain: Clinical Chemistry
 Standard: IFCC & KDOQI Laboratory Standards
 """
 import datetime
+import math
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List, Optional, Any
@@ -33,6 +34,19 @@ class ClinicalCasePayload:
     clinical_notes: str = ""
     biomarkers: Dict[str, Any] = field(default_factory=dict)
     timestamp: str = field(default_factory=lambda: datetime.datetime.now(datetime.timezone.utc).isoformat())
+
+    def __post_init__(self) -> None:
+        """Reject invalid inputs rather than incorrectly classifying them as normal."""
+        for name in ("case_id", "patient_synthetic_id"):
+            value = getattr(self, name)
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError(f"{name} must be a non-empty string")
+        for name in ("primary_metric", "secondary_metric"):
+            value = getattr(self, name)
+            if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+                raise ValueError(f"{name} must be a finite numeric value")
+        if not isinstance(self.is_stat, bool):
+            raise ValueError("is_stat must be a boolean")
 
 
 @dataclass
